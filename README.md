@@ -46,4 +46,4 @@ ggplot(subcatPoints, aes(x, y, color = sub, color.group = main)) +
 
 That's it!
 
-Further customization and advanced usage will be updated in the vignette.
+Further customization and advanced usage will be updated in the vignette, which can be browsed in RStudio when running `vignette("ggsubcat")` (must have `build_vignettes = TRUE` added at `devtools::install_github()` call)
