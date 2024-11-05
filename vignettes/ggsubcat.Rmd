@@ -1,0 +1,102 @@
+---
+title: "ggsubcat: Sub-categorical color scales and guides with ggplot2"
+output: rmarkdown::html_vignette
+author: Yichen Wang
+vignette: >
+  %\VignetteIndexEntry{ggsubcat: Sub-categorical color scales and guides with ggplot2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  fig.align = "center"
+)
+```
+
+Admitting that human eyes cannot easily distinguish too many colors when we have many categories to be colored on a plot, a clever way is always in need. For the specific scenario where only a few categories exist while they can be sub-devided into many more sub-categories, this package proposes to distinguish the sub-categories within one main category by luminance (lightness) and chroma (intensity of color), while distinguishing main categories by different colors you can tell by words.
+
+This package is dedicated to keep the grammer of graphics philosophy of ggplot2, so you can make the sub-categorical coloring happen as simply as adding an additional aesthetic and a scale to the call chain of ggplot2, with all other flexibility retained.
+
+```{r setup}
+library(ggsubcat)
+library(ggplot2)
+library(cowplot)
+```
+
+## Example data simulation
+
+First, let's begin with some simulated data. Here we bring totally 900 data points grouped into 3 main categories, each divided into 3 sub-categories. The x and y positions are selected to reflect the relationship between the information, which you will see in the scatter plot later.
+
+```{r data}
+set.seed(27)
+df <- data.frame(
+    x = c(rnorm(100, 1, 0.3), rnorm(100, 2, 0.3), rnorm(100, 3, 0.3),
+          rnorm(100, 7, 0.3), rnorm(100, 8, 0.3), rnorm(100, 9, 0.3),
+          rnorm(100, 4, 0.3), rnorm(100, 5, 0.3), rnorm(100, 6, 0.3)),
+    y = c(rnorm(100, 1, 0.3), rnorm(100, 2, 0.3), rnorm(100, 1, 0.3),
+          rnorm(100, 1, 0.3), rnorm(100, 2, 0.3), rnorm(100, 1, 0.3),
+          rnorm(100, 5, 0.3), rnorm(100, 6, 0.3), rnorm(100, 5, 0.3)),
+    main = factor(c(
+        rep("A", 300),
+        rep("B", 300),
+        rep("C", 300)
+    )),
+    sub = factor(c(
+        rep("a1", 100), rep("a2", 100), rep("a3", 100),
+        rep("b1", 100), rep("b2", 100), rep("b3", 100),
+        rep("c1", 100), rep("c2", 100), rep("c3", 100)
+    ))
+)
+```
+
+This should be actually equivalent to the package-delivered dataset `subcatPoints`
+
+```{r data2}
+data("subcatPoints")
+```
+
+## Coloring points with sub-categorical information
+
+Scatter plot case. We show that we color the dots by the main categories or by the sub-categories first.
+
+```{r plot, fig.height=3, fig.width=7}
+p.main <- ggplot(df, aes(x, y, color = main)) +
+    geom_point()
+p.sub <- ggplot(df, aes(x, y, color = sub)) +
+    geom_point()
+plot_grid(p.main, p.sub, ncol = 2)
+```
+
+As you can see on the left panel, the dots are forming three main populations, while on the right panel, each main population is divided into three sub-populations, closely placed. This is very similar to the scenario in bioinformatics analysis, where course annotation of cell types can be finely annotated to sub-types, and researchers need to somehow color the dots on the low-dimensional embedding plot to visualize the cell populations.
+
+Then with `scale_colour_subcat()`, we can color the dots by sub-categories, with the main category information retained.
+
+```{r plot2, fig.width=5, fig.height=4}
+ggplot(df, aes(x, y, color = sub, color.group = main)) +
+    geom_point() +
+    scale_colour_subcat()
+```
+
+## `fill` aesthetic can also be used
+
+Similarly, with a bar plot where the aesthetic `fill` is to be used, we color the barsby the main categories or the sub-categories first.
+
+```{r plot3, fig.width=7, fig.height=3}
+b.main <- ggplot(df, aes(x = sub, y = y, fill = main)) +
+    geom_bar(stat = "identity")
+b.sub <- ggplot(df, aes(x = sub, y = y, fill = sub)) +
+    geom_bar(stat = "identity")
+plot_grid(b.main, b.sub, ncol = 2)
+```
+
+Then with `scale_fill_subcat()`, we can color the bars by sub-categories, with the main category information retained.
+
+```{r plot4, fig.width=5, fig.height=4}
+ggplot(df, aes(x = sub, y = y, fill = sub, fill.group = main)) +
+    geom_bar(stat = "identity") +
+    scale_fill_subcat()
+```

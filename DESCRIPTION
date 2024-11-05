@@ -1,0 +1,31 @@
+Package: ggsubcat
+Title: Sub-categorical coloring in ggplot2
+Version: 0.0.0.9000
+Authors@R: 
+    person("Yichen", "Wang", , "wayichen@umich.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-4347-5199"))
+Description: Provides scales and guides that aim to scale sub-categorical data 
+    to informative colors and generate grouped legends in ggplot2.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr
+Imports:
+    ggplot2,
+    rlang,
+    scales,
+    grid,
+    gtable,
+    vctrs,
+    cli,
+    farver,
+    lifecycle
+Suggests:
+    testthat,
+    covr,
+    knitr,
+    cowplot
+Depends: 
+    R (>= 2.10)
+LazyData: true
