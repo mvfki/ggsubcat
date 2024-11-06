@@ -1,3 +1,5 @@
+[![R](https://github.com/mvfki/ggsubcat/actions/workflows/r.yml/badge.svg?branch=main&event=push)](https://github.com/mvfki/ggsubcat/actions/workflows/r.yml)
+
 # Scales colors for sub-categorical variables for ggplot2
 
 Admitting that human eyes cannot easily distinguish too many colors when we have many categories to be colored on a plot, a clever way is always in need. For the specific scenario where only a few categories exist while they can be sub-devided into many more sub-categories, this package proposes to distinguish the sub-categories within one main category by luminance (lightness) and chroma (intensity of color), while distinguishing main categories by different colors you can tell by words.
