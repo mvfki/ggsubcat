@@ -40,6 +40,20 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+      - name: Install library on Linux
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install pandoc
+
+      - name: Install library on MacOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install pandoc
+
+      - name: Install library on Windows
+        if: runner.os == 'Windows'
+        run: |
+          choco install pandoc
 
       - name: Install dependencies
         run: |
